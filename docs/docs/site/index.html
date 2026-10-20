@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+<meta content="mkdocs-1.6.1, mkdocs-terminal-4.8.0" name="generator"/>
+<link href="img/android-chrome-192x192.png" rel="icon" sizes="192x192" type="image/png"/>
+<link href="img/android-chrome-512x512.png" rel="icon" sizes="512x512" type="image/png"/>
+<link href="img/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180"/>
+<link href="img/favicon.ico" rel="shortcut icon" sizes="48x48" type="image/png"/>
+<link href="img/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png"/>
+<link href="img/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+<title>Welcome - Open Drive Alerts Docs</title>
+<link href="css/fontawesome/css/fontawesome.min.css" rel="stylesheet"/>
+<link href="css/fontawesome/css/solid.min.css" rel="stylesheet"/>
+<link href="css/normalize.css" rel="stylesheet"/>
+<link href="css/terminal.css" rel="stylesheet"/>
+<link href="css/theme.css" rel="stylesheet"/>
+<link href="css/theme.tile_grid.css" rel="stylesheet"/>
+<link href="css/theme.footer.css" rel="stylesheet"/>
+<!-- default color palette -->
+<link href="css/palettes/default.css" rel="stylesheet"/>
+<!-- page layout -->
+<style>
+/* initially set page layout to a one column grid */
+.terminal-mkdocs-main-grid {
+    display: grid;
+    grid-column-gap: 1.4em;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+}
+
+/*  
+*   when side navigation is not hidden, use a two column grid.  
+*   if the screen is too narrow, fall back to the initial one column grid layout.
+*   in this case the main content will be placed under the navigation panel. 
+*/
+@media only screen and (min-width: 70em) {
+    .terminal-mkdocs-main-grid {
+        grid-template-columns: 4fr 9fr;
+    }
+}</style>
+<!-- search css support -->
+<link href="css/search/bootstrap-modal.css" rel="stylesheet"/>
+<!-- search scripts -->
+<script>
+    var base_url = ".",
+    shortcuts = "{}";
+</script>
+<script defer="" src="js/jquery/jquery-1.10.1.min.js"></script>
+<script defer="" src="js/bootstrap/bootstrap.min.js"></script>
+<script defer="" src="js/mkdocs/base.js"></script>
+<script src="search/main.js"></script>
+</head>
+<body class="terminal"><div class="container">
+<div class="terminal-nav">
+<header class="terminal-logo">
+<div class="logo terminal-prompt" id="mkdocs-terminal-site-name"><a class="no-style" href="/">Open Drive Alerts Docs</a></div>
+</header>
+<nav class="terminal-menu">
+<ul typeof="BreadcrumbList" vocab="https://schema.org/">
+<li property="itemListElement" typeof="ListItem">
+<a class="menu-item active" href="." property="item" typeof="WebPage">
+<span property="name">Welcome</span>
+</a>
+<meta content="0" property="position"/>
+</li>
+<li property="itemListElement" typeof="ListItem">
+<a class="menu-item" href="alerts/" property="item" typeof="WebPage">
+<span property="name">Alerts</span>
+</a>
+<meta content="1" property="position"/>
+</li>
+<li property="itemListElement" typeof="ListItem">
+<a class="menu-item" data-target="#mkdocs_search_modal" data-toggle="modal" href="#" property="item" typeof="SearchAction">
+<i aria-hidden="true" class="fa fa-search"></i> <span property="name">Search</span>
+</a>
+<meta content="2" property="position"/>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+<div class="container">
+<div class="terminal-mkdocs-main-grid"><aside id="terminal-mkdocs-side-panel"><nav>
+<ul class="terminal-mkdocs-side-nav-items">
+<li class="terminal-mkdocs-side-nav-li">
+<span class="terminal-mkdocs-side-nav-item--active">Welcome</span>
+</li>
+<li class="terminal-mkdocs-side-nav-li">
+<a class="terminal-mkdocs-side-nav-item" href="alerts/">Alerts</a>
+</li>
+</ul>
+</nav><hr/>
+<nav>
+<ul>
+<li><a href="#welcome">Welcome</a></li>
+<li><a href="#why-are-we-creating-this">Why are We Creating this?</a></li><li><a href="#high-level-structure">High-level Structure</a></li>
+</ul>
+</nav>
+</aside>
+<main id="terminal-mkdocs-main-content">
+<section id="mkdocs-terminal-content">
+<h1 id="welcome">Welcome</h1>
+<p>A privacy-preserving protocol to alert drivers about different events for a better driving experience, regardless of map platform.</p>
+<h2 id="why-are-we-creating-this">Why are We Creating this?</h2>
+<ul>
+<li>When driving, alerts can be very usefull, whether they are used for more accurate journey time or avoiding congestion soon to occur due to an accident.</li>
+<li>When using other platforms, you location, speed, alert time and other metrics are sitting together, to be collected, used or in the worst case, stolen.</li>
+<li>We want to seperate an user from their location and alert.</li>
+<li>Also, by allowing any map provider to work with us, we create a better experience for everyone with more accurate alerts.</li>
+</ul>
+<h2 id="high-level-structure">High-level Structure</h2>
+<div class="mermaid">flowchart TD
+    subgraph map-provider[Map Provider]
+        direction LR
+        map-provider-server[Map Provider Auth Server] --&gt;|optional| map-provider-db[Map Provider Database]
+    end
+    subgraph alert-server[Centralized Alert Server]
+        direction LR
+        alert-server-service[Post Endpoint] --&gt;|stores alert information| alert-server-db[Database]
+        alert-server-db --&gt; |makes alerts avalible| alert-publish-server-db[Request / Publish Endpoint]
+    end
+    client[Client] --&gt;|proxies through| map-provider
+    map-provider --&gt;|forwards stripped &amp; authenticated request| alert-server
+</div>
+<h3 id="client">Client</h3>
+<ul>
+<li>When posting, the alert information (location, type) are encrypted to only be seen by centralized server.</li>
+<li>Requests are proxied through their map provider.</li>
+</ul>
+<h3 id="map-provider-service">Map Provider Service</h3>
+<ul>
+<li>Mainly to provide authentication and rate-limiting features that protect the centralized alert server</li>
+<li>Verify users in whichever way the service wants, then if verified, the still encrypted alert information is forwarded to the alert server.</li>
+</ul>
+<h3 id="alert-server">Alert Server</h3>
+<ul>
+<li>Only has to trust map providers.</li>
+<li>Publishes alerts in batches to further obsfuscate requests.</li>
+</ul>
+</section>
+</main>
+</div>
+<hr/><footer>
+<div class="terminal-mkdocs-footer-grid">
+<div id="terminal-mkdocs-footer-copyright-info">
+             Site built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="https://github.com/ntno/mkdocs-terminal">Terminal for MkDocs</a>.
+        </div>
+</div>
+</footer>
+</div>
+<div aria-labelledby="searchModalLabel" aria-modal="true" class="modal" id="mkdocs_search_modal" role="alertdialog" tabindex="-1">
+<div class="modal-dialog modal-lg" role="search">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="searchModalLabel">Search</h5>
+<button aria-label="Close" class="close btn btn-default btn-ghost" data-dismiss="modal" type="button">x</button>
+</div>
+<div class="modal-body">
+<p id="searchInputLabel">Type to start searching</p>
+<form>
+<div class="form-group">
+<input aria-labelledby="searchInputLabel" class="form-control" id="mkdocs-search-query" placeholder="" title="Please enter search terms here" type="search"/>
+</div>
+</form>
+<div data-no-results-text="No document matches found" id="mkdocs-search-results"></div>
+</div>
+<div class="modal-footer">
+</div>
+</div>
+</div>
+</div>
+<script type="module">import mermaid from "https://unpkg.com/mermaid@10.4.0/dist/mermaid.esm.min.mjs";
+mermaid.initialize({});</script></body>
+</html>

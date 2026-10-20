@@ -7,7 +7,6 @@ Implementation of a privacy-preserving, cross-platform protocol / service which 
 - When posted, the user verification and encrypted alert info will be given to a "client-service" server, this is ran by the map provider and they are just there to verify users and forward alert info.
 - Once a user is verified and any abuse-control filters have been done, the encrypted alert will be passed onto the central server. The client-service server will then either verify itself or this will already be known through the connection (e.g verifying TLS credentials).
 - Once the central server has the alert, it will save said alert and add it to the next batch available to view.
-- 
 
 ## Goals
 - Prevent map services from seeing location data

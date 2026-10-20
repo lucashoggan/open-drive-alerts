@@ -1,0 +1,8 @@
+site_name: Open Drive Alerts Docs
+theme: terminal
+nav:
+  - index.md
+  - alerts.md
+plugins:
+  - search
+  - mermaid2
